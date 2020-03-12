@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.facebook.common.logging.FLog;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -27,10 +29,11 @@ import javax.annotation.Nullable;
 
 public class OrientationModule extends ReactContextBaseJavaModule implements LifecycleEventListener{
     final BroadcastReceiver receiver;
+    private ReactApplicationContext ctx;
 
     public OrientationModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        final ReactApplicationContext ctx = reactContext;
+        ctx = reactContext;
 
         receiver = new BroadcastReceiver() {
             @Override
@@ -113,6 +116,11 @@ public class OrientationModule extends ReactContextBaseJavaModule implements Lif
             return;
         }
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    }
+
+    @ReactMethod
+    public void isAutoOrientationDisabledAndroid(final Callback callback) {
+        callback.invoke(Settings.System.getInt(ctx.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 0);
     }
 
     @Override

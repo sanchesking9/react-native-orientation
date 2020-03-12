@@ -13,4 +13,5 @@
 @interface Orientation : NSObject <RCTBridgeModule>
 + (void)setOrientation: (UIInterfaceOrientationMask)orientation;
 + (UIInterfaceOrientationMask)getOrientation;
++ (UIInterfaceOrientationMask)getMaskPortrait;
 @end

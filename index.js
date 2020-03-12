@@ -1,5 +1,6 @@
 var Orientation = require('react-native').NativeModules.Orientation;
 var DeviceEventEmitter = require('react-native').DeviceEventEmitter;
+var Platform = require('react-native').Platform;
 
 var listeners = {};
 var orientationDidChangeEvent = 'orientationDidChange';
@@ -33,6 +34,16 @@ module.exports = {
     Orientation.getSpecificOrientation((error,orientation) =>{
       cb(error, orientation);
     });
+  },
+
+  isAutoOrientationDisabled(cb) {
+    if (Platform.OS === 'android') {
+      Orientation.isAutoOrientationDisabledAndroid(isAutoOrientationDisabled => {
+        cb(isAutoOrientationDisabled);
+      });
+    } else {
+      cb(false);
+    }
   },
 
   lockToPortrait() {
